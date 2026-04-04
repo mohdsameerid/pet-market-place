@@ -13,6 +13,7 @@ public class User : BaseEntity
     public UserRole Role { get; set; } = UserRole.Buyer;
     public bool IsVerified { get; set; } = false;
     public bool IsBanned { get; set; } = false;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation
     public ICollection<Listing> Listings { get; set; } = new List<Listing>();

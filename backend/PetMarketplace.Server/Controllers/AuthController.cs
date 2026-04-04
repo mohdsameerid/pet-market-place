@@ -21,11 +21,11 @@ public class AuthController : ControllerBase
 
     /// <summary>Register a new Buyer or Seller account</summary>
     [HttpPost("register")]
-    public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Register(
+    public async Task<ActionResult<ApiResponse<string>>> Register(
         RegisterRequestDto request, CancellationToken cancellationToken)
     {
-        var result = await _authService.RegisterAsync(request, cancellationToken);
-        return Ok(ApiResponse<AuthResponseDto>.Ok(result, "Registration successful."));
+        var message = await _authService.RegisterAsync(request, cancellationToken);
+        return Ok(ApiResponse<string>.Ok(message));
     }
 
     /// <summary>Login and receive JWT token</summary>

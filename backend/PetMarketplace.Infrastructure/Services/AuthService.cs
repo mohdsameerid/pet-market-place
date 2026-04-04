@@ -24,7 +24,7 @@ public class AuthService : IAuthService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request, CancellationToken cancellationToken = default)
+    public async Task<string> RegisterAsync(RegisterRequestDto request, CancellationToken cancellationToken = default)
     {
         var exists = await _context.Users
             .AnyAsync(u => u.Email == request.Email.ToLower(), cancellationToken);
@@ -49,7 +49,7 @@ public class AuthService : IAuthService
         _context.Users.Add(user);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return BuildAuthResponse(user);
+        return "Registration successful. Please verify your email before logging in.";
     }
 
     public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken = default)
@@ -62,6 +62,9 @@ public class AuthService : IAuthService
 
         if (user.IsBanned)
             throw new UnauthorizedAccessException("Your account has been banned.");
+
+        if (!user.IsVerified)
+            throw new UnauthorizedAccessException("Your email is not verified. Please verify your email before logging in.");
 
         return BuildAuthResponse(user);
     }

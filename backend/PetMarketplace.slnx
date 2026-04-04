@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PetMarketplace.Application/PetMarketplace.Application.csproj" />
+  <Project Path="PetMarketplace.Core/PetMarketplace.Core.csproj" />
+  <Project Path="PetMarketplace.Infrastructure/PetMarketplace.Infrastructure.csproj" />
+  <Project Path="PetMarketplace.Server/PetMarketplace.Server.csproj" />
+</Solution>

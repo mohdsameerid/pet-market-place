@@ -1,0 +1,18 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+
+# App settings (contain secrets)
+appsettings.json
+appsettings.Development.json
+.env
+
+# EF Core migrations (generated)
+Migrations/
+
+# Publish output
+publish/

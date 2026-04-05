@@ -10,10 +10,12 @@ namespace PetMarketplace.Infrastructure.Services;
 public class AdminService : IAdminService
 {
     private readonly AppDbContext _context;
+    private readonly INotificationService _notificationService;
 
-    public AdminService(AppDbContext context)
+    public AdminService(AppDbContext context, INotificationService notificationService)
     {
         _context = context;
+        _notificationService = notificationService;
     }
 
     public async Task<DashboardStatsDto> GetDashboardStatsAsync(CancellationToken cancellationToken = default)
@@ -91,6 +93,12 @@ public class AdminService : IAdminService
 
         await _context.SaveChangesAsync(cancellationToken);
 
+        await _notificationService.CreateAsync(
+            listing.SellerId,
+            "Listing Approved!",
+            $"Your listing '{listing.Title}' has been approved and is now live.",
+            cancellationToken);
+
         return MapToAdminListingDto(listing);
     }
 
@@ -114,6 +122,12 @@ public class AdminService : IAdminService
         listing.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        await _notificationService.CreateAsync(
+            listing.SellerId,
+            "Listing Rejected",
+            $"Your listing '{listing.Title}' was rejected. Reason: {request.Reason}",
+            cancellationToken);
 
         return MapToAdminListingDto(listing);
     }

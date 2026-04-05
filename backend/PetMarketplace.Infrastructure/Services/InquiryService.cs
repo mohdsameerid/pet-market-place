@@ -10,10 +10,12 @@ namespace PetMarketplace.Infrastructure.Services;
 public class InquiryService : IInquiryService
 {
     private readonly AppDbContext _context;
+    private readonly INotificationService _notificationService;
 
-    public InquiryService(AppDbContext context)
+    public InquiryService(AppDbContext context, INotificationService notificationService)
     {
         _context = context;
+        _notificationService = notificationService;
     }
 
     public async Task<InquiryResponseDto> CreateInquiryAsync(
@@ -60,6 +62,12 @@ public class InquiryService : IInquiryService
         _context.InquiryMessages.Add(message);
         await _context.SaveChangesAsync(cancellationToken);
 
+        await _notificationService.CreateAsync(
+            listing.SellerId,
+            "New Inquiry",
+            $"You have a new inquiry on your listing '{listing.Title}'.",
+            cancellationToken);
+
         return await GetInquiryByIdAsync(inquiry.Id, buyerId, cancellationToken);
     }
 
@@ -94,6 +102,13 @@ public class InquiryService : IInquiryService
 
         _context.InquiryMessages.Add(message);
         await _context.SaveChangesAsync(cancellationToken);
+
+        var recipientId = isBuyer ? inquiry.Listing.SellerId : inquiry.BuyerId;
+        await _notificationService.CreateAsync(
+            recipientId,
+            "New Message",
+            $"You have a new message regarding '{inquiry.Listing.Title}'.",
+            cancellationToken);
 
         return new InquiryMessageResponseDto
         {

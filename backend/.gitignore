@@ -1,14 +1,16 @@
 # Build output
-bin/
-obj/
+**/bin/
+**/obj/
 
 # Visual Studio
 .vs/
 *.user
 
-# App settings (contain secrets)
-appsettings.json
-appsettings.Development.json
+# Secrets — production config with real credentials
+appsettings.Production.json
+/appsettings.*.json
+!/appsettings.json
+!**/appsettings.Development.json
 .env
 
 # EF Core migrations (generated)

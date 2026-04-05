@@ -4,17 +4,25 @@ using PetMarketplace.Server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontends", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:3001")
+        var allowedOrigins = builder.Configuration
+            .GetSection("AllowedOrigins")
+            .Get<string[]>() ?? Array.Empty<string>();
+
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -22,16 +30,24 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Middleware pipeline
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetMarketplace API v1");
+        c.DisplayRequestDuration();
+    });
 }
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseCors("AllowFrontends");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health");
+
 app.Run();

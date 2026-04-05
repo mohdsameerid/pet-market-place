@@ -16,11 +16,12 @@ public static class SwaggerExtensions
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header. Enter: Bearer {token}",
+                Description = "Paste your JWT token. Swagger will add 'Bearer ' automatically.",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT"
             });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement

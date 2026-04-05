@@ -18,10 +18,14 @@ public static class InfrastructureServiceExtensions
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
+
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IListingService, ListingService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IImageService, ImageService>();
+        services.AddScoped<IListingImageService, ListingImageService>();
         services.AddHttpContextAccessor();
 
         return services;

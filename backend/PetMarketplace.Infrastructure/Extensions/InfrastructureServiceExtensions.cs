@@ -26,6 +26,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IListingImageService, ListingImageService>();
+        services.AddScoped<IFavoriteService, FavoriteService>();
+        services.AddScoped<IReviewService, ReviewService>();
         services.AddHttpContextAccessor();
 
         return services;

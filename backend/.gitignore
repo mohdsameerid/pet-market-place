@@ -6,11 +6,10 @@
 .vs/
 *.user
 
-# Secrets — production config with real credentials
-appsettings.Production.json
+# App settings — only the base template (no real values) is committed.
+# Real credentials go in .NET User Secrets (dotnet user-secrets) or environment variables.
 /appsettings.*.json
 !/appsettings.json
-!**/appsettings.Development.json
 .env
 
 # EF Core migrations (generated)

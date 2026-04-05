@@ -32,7 +32,7 @@ public class GlobalExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        context.Response.StatusCode = ex switch
+        var statusCode = ex switch
         {
             UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
             KeyNotFoundException => (int)HttpStatusCode.NotFound,
@@ -40,7 +40,14 @@ public class GlobalExceptionMiddleware
             _ => (int)HttpStatusCode.InternalServerError
         };
 
-        var response = ApiResponse<object>.Fail(ex.Message);
+        context.Response.StatusCode = statusCode;
+
+        // Never expose internal exception details to the client on 500
+        var clientMessage = statusCode == (int)HttpStatusCode.InternalServerError
+            ? "An unexpected error occurred. Please try again later."
+            : ex.Message;
+
+        var response = ApiResponse<object>.Fail(clientMessage);
         var json = JsonSerializer.Serialize(response, new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase

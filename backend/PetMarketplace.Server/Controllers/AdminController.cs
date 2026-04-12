@@ -22,7 +22,7 @@ public class AdminController : ControllerBase
     [HttpGet("dashboard")]
     public async Task<ActionResult<ApiResponse<DashboardStatsDto>>> GetDashboard(
         CancellationToken cancellationToken)
-    {
+    { 
         var result = await _adminService.GetDashboardStatsAsync(cancellationToken);
         return Ok(ApiResponse<DashboardStatsDto>.Ok(result));
     }

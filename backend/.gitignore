@@ -17,3 +17,8 @@ Migrations/
 
 # Publish output
 publish/
+
+
+appsettings.Production.json
+**/bin/
+**/obj/

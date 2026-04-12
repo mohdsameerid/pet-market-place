@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetMarketplace.Application.Common;
@@ -15,7 +16,7 @@ public static class InfrastructureServiceExtensions
         IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));

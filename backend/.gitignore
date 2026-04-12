@@ -22,3 +22,5 @@ publish/
 appsettings.Production.json
 **/bin/
 **/obj/
+
+**/appsettings.Development.json

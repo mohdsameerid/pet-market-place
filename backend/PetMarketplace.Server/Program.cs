@@ -13,7 +13,7 @@ builder.Services.AddSwaggerWithJwt();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddHealthChecks()
-    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 // CORS
 builder.Services.AddCors(options =>

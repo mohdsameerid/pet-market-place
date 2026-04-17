@@ -14,4 +14,5 @@ public interface IAdminService
     Task<AdminUserResponseDto> VerifySellerAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<AdminUserResponseDto> BanUserAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<AdminUserResponseDto> UnbanUserAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<AdminUserResponseDto> UpdateUserAsync(Guid userId, UpdateUserRequestDto request, CancellationToken cancellationToken = default);
 }

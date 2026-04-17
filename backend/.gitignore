@@ -24,3 +24,5 @@ appsettings.Production.json
 **/obj/
 
 **/appsettings.Development.json
+
+**/API_REFERENCE.md

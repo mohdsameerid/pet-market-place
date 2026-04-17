@@ -240,6 +240,31 @@ public class AdminService : IAdminService
         return await GetAdminUserDtoAsync(user.Id, cancellationToken);
     }
 
+    public async Task<AdminUserResponseDto> UpdateUserAsync(
+        Guid userId, UpdateUserRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+        if (user == null)
+            throw new KeyNotFoundException("User not found.");
+
+        if (!Enum.TryParse<UserRole>(request.Role, true, out var parsedRole))
+            throw new ArgumentException($"Invalid role: {request.Role}. Must be Buyer, Seller, or Admin.");
+
+        user.FullName = request.FullName;
+        user.Email = request.Email;
+        user.PhoneNumber = request.PhoneNumber;
+        user.City = request.City;
+        user.Role = parsedRole;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return await GetAdminUserDtoAsync(user.Id, cancellationToken);
+    }
+
     // ── Private Helpers ──────────────────────────────────────────
 
     private async Task<PagedResult<AdminListingResponseDto>> PaginateListingsAsync(

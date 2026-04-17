@@ -41,13 +41,13 @@ public class UsersController : ControllerBase
         return Ok(ApiResponse<AdminUserResponseDto>.Ok(result, "User updated."));
     }
 
-    /// <summary>Give a seller the verified badge</summary>
-    [HttpPost("{id:guid}/verify-seller")]
-    public async Task<ActionResult<ApiResponse<AdminUserResponseDto>>> VerifySeller(
+    /// <summary>Verify a user (admin action)</summary>
+    [HttpPost("{id:guid}/verify")]
+    public async Task<ActionResult<ApiResponse<AdminUserResponseDto>>> VerifyUser(
         Guid id, CancellationToken cancellationToken)
     {
-        var result = await _adminService.VerifySellerAsync(id, cancellationToken);
-        return Ok(ApiResponse<AdminUserResponseDto>.Ok(result, "Seller verified."));
+        var result = await _adminService.VerifyUserAsync(id, cancellationToken);
+        return Ok(ApiResponse<AdminUserResponseDto>.Ok(result, "User verified."));
     }
 
     /// <summary>Ban a user — they cannot login after this</summary>

@@ -180,7 +180,7 @@ public class AdminService : IAdminService
         };
     }
 
-    public async Task<AdminUserResponseDto> VerifySellerAsync(
+    public async Task<AdminUserResponseDto> VerifyUserAsync(
         Guid userId,
         CancellationToken cancellationToken = default)
     {

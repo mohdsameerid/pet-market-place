@@ -45,4 +45,15 @@ public class AuthController : ControllerBase
         var result = await _authService.GetCurrentUserAsync(_currentUser.UserId, cancellationToken);
         return Ok(ApiResponse<UserProfileDto>.Ok(result));
     }
+
+    /// <summary>Update current logged-in user's profile (name, phone, city)</summary>
+    [Authorize]
+    [HttpPut("me")]
+    public async Task<ActionResult<ApiResponse<UserProfileDto>>> UpdateProfile(
+        [FromBody] UpdateProfileRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _authService.UpdateProfileAsync(_currentUser.UserId, request, cancellationToken);
+        return Ok(ApiResponse<UserProfileDto>.Ok(result, "Profile updated."));
+    }
 }

@@ -91,6 +91,37 @@ public class AuthService : IAuthService
         };
     }
 
+    public async Task<UserProfileDto> UpdateProfileAsync(
+        Guid userId, UpdateProfileRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+        if (user == null)
+            throw new KeyNotFoundException("User not found.");
+
+        user.FullName = request.FullName;
+        user.PhoneNumber = request.PhoneNumber;
+        user.City = request.City;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new UserProfileDto
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            City = user.City,
+            ProfileImageUrl = user.ProfileImageUrl,
+            Role = user.Role.ToString(),
+            IsVerified = user.IsVerified,
+            CreatedAt = user.CreatedAt
+        };
+    }
+
     private AuthResponseDto BuildAuthResponse(User user) => new()
     {
         Id = user.Id,

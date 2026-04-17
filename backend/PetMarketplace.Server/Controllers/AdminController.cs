@@ -70,42 +70,4 @@ public class AdminController : ControllerBase
         return Ok(ApiResponse<AdminListingResponseDto>.Ok(result, "Listing rejected."));
     }
 
-    /// <summary>Get all users with optional role filter</summary>
-    [HttpGet("users")]
-    public async Task<ActionResult<ApiResponse<PagedResult<AdminUserResponseDto>>>> GetAllUsers(
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 20,
-        [FromQuery] string? role = null,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await _adminService.GetAllUsersAsync(pageNumber, pageSize, role, cancellationToken);
-        return Ok(ApiResponse<PagedResult<AdminUserResponseDto>>.Ok(result));
-    }
-
-    /// <summary>Give a seller the verified badge</summary>
-    [HttpPost("users/{id:guid}/verify-seller")]
-    public async Task<ActionResult<ApiResponse<AdminUserResponseDto>>> VerifySeller(
-        Guid id, CancellationToken cancellationToken)
-    {
-        var result = await _adminService.VerifySellerAsync(id, cancellationToken);
-        return Ok(ApiResponse<AdminUserResponseDto>.Ok(result, "Seller verified."));
-    }
-
-    /// <summary>Ban a user — they cannot login after this</summary>
-    [HttpPost("users/{id:guid}/ban")]
-    public async Task<ActionResult<ApiResponse<AdminUserResponseDto>>> BanUser(
-        Guid id, CancellationToken cancellationToken)
-    {
-        var result = await _adminService.BanUserAsync(id, cancellationToken);
-        return Ok(ApiResponse<AdminUserResponseDto>.Ok(result, "User banned."));
-    }
-
-    /// <summary>Unban a previously banned user</summary>
-    [HttpPost("users/{id:guid}/unban")]
-    public async Task<ActionResult<ApiResponse<AdminUserResponseDto>>> UnbanUser(
-        Guid id, CancellationToken cancellationToken)
-    {
-        var result = await _adminService.UnbanUserAsync(id, cancellationToken);
-        return Ok(ApiResponse<AdminUserResponseDto>.Ok(result, "User unbanned."));
-    }
 }

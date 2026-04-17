@@ -190,9 +190,6 @@ public class AdminService : IAdminService
         if (user == null)
             throw new KeyNotFoundException("User not found.");
 
-        if (user.Role != UserRole.Seller)
-            throw new InvalidOperationException("Only sellers can be verified.");
-
         user.IsVerified = true;
         user.UpdatedAt = DateTime.UtcNow;
 
